@@ -47,6 +47,8 @@ export default function ContactPage() {
   if (CONTACT_PAGE_OVERRIDE_ENABLED) {
     return <ContactPageOverride />
   }
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || `hello@${SITE_CONFIG.domain}`
+  const contactEmailHref = `mailto:${contactEmail}`
 
   const { recipe } = getFactoryState()
   const productKind = getProductKind(recipe)
@@ -104,6 +106,9 @@ export default function ContactPage() {
               <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="What do you need help with?" />
               <textarea className="min-h-[180px] rounded-2xl border border-current/10 bg-transparent px-4 py-3 text-sm" placeholder="Share the full context so we can respond with the right next step." />
               <button type="submit" className={`inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-semibold ${tone.action}`}>Send message</button>
+              <a href={contactEmailHref} className="inline-flex h-12 items-center justify-center rounded-full border border-current/20 px-6 text-sm font-semibold">
+                Email us at {contactEmail}
+              </a>
             </form>
           </div>
         </section>

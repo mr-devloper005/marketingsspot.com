@@ -191,8 +191,8 @@ export default function AboutPage() {
               ))}
             </div>
             <div className="mt-10 text-center">
-              <Link href="/team" className="inline-flex items-center gap-2 rounded-full bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3f4aa8]">
-                Meet the Whole Team <ArrowRight className="h-4 w-4" />
+              <Link href="/contact" className="inline-flex items-center gap-2 rounded-full bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3f4aa8]">
+                Talk to Our Team <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>

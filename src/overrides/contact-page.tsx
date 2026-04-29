@@ -24,6 +24,9 @@ const OFFICES = [
 ]
 
 export function ContactPageOverride() {
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || `hello@${SITE_CONFIG.domain}`
+  const contactEmailHref = `mailto:${contactEmail}`
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -86,9 +89,9 @@ export function ContactPageOverride() {
 
         <section className="relative z-10 mx-auto -mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-4 sm:grid-cols-3">
-            {[
+            {[ 
               { icon: Phone, label: 'Call us', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-              { icon: Mail, label: 'Email us', value: `hello@${SITE_CONFIG.domain}`, href: `mailto:hello@${SITE_CONFIG.domain}` },
+              { icon: Mail, label: 'Email us', value: contactEmail, href: contactEmailHref },
               { icon: Clock, label: 'Office hours', value: 'Mon - Sat, 9am - 7pm' },
             ].map((c) => (
               <a key={c.label} href={c.href || '#'} className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:shadow-xl">
@@ -194,6 +197,9 @@ export function ContactPageOverride() {
                     <button type="submit" disabled={submitting} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#4E56C0] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#3f4aa8] disabled:opacity-70">
                       {submitting ? (<><Loader2 className="h-4 w-4 animate-spin" /> Sending...</>) : (<>Send Message <ArrowRight className="h-4 w-4" /></>)}
                     </button>
+                    <a href={contactEmailHref} className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50">
+                      <Mail className="h-4 w-4 text-[#4E56C0]" /> Email Us
+                    </a>
                     <p className="text-xs text-slate-500">By sending, you agree to our <Link href="/privacy" className="text-[#4E56C0] hover:underline">privacy policy</Link>.</p>
                   </form>
                 </>

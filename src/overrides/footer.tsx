@@ -8,7 +8,6 @@ const SITE_MAP = [
   { name: 'Home', href: '/' },
   { name: 'Listings', href: '/listings' },
   { name: 'About Us', href: '/about' },
-  { name: 'Our Agents', href: '/team' },
   { name: 'Contact', href: '/contact' },
 ]
 

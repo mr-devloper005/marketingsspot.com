@@ -1,4 +1,4 @@
-import Link from 'next/link'
+ï»¿import Link from 'next/link'
 import { ArrowRight, Database, Eye, FileText, Lock, Mail, Settings, ShieldCheck, UserCheck } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
               <p className="mt-6 max-w-xl text-lg leading-8 text-white/85">
                 A clear overview of what we collect, why we collect it, and how we keep it safe.
               </p>
-              <p className="mt-4 text-sm text-white/70">Last updated: April 1, 2026 · Effective: April 15, 2026</p>
+              <p className="mt-4 text-sm text-white/70">Last updated: April 1, 2026 Â· Effective: April 15, 2026</p>
             </div>
           </div>
         </section>
@@ -85,9 +85,9 @@ export default function PrivacyPage() {
                 </div>
                 <p className="mt-4">When you use {SITE_CONFIG.name}, we collect three categories of information:</p>
                 <ul className="mt-4 space-y-2 list-disc pl-6">
-                  <li><strong>Account data</strong> — your name, email, phone number, and profile photo when you create an account.</li>
-                  <li><strong>Activity data</strong> — listings you save, properties you view, searches you run, and messages you send through the platform.</li>
-                  <li><strong>Device data</strong> — basic technical details like browser type, IP address, and the pages you visit, used for performance and security.</li>
+                  <li><strong>Account data</strong> â€” your name, email, phone number, and profile photo when you create an account.</li>
+                  <li><strong>Activity data</strong> â€” listings you save, properties you view, searches you run, and messages you send through the platform.</li>
+                  <li><strong>Device data</strong> â€” basic technical details like browser type, IP address, and the pages you visit, used for performance and security.</li>
                 </ul>
               </section>
 
@@ -176,3 +176,4 @@ export default function PrivacyPage() {
     </div>
   )
 }
+

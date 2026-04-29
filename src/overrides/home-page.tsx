@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, MapPin, BedDouble, Bath, Maximize, Search, Star, Phone, Mail, ShieldCheck, Award, Users, Home as HomeIcon, ChevronRight, Quote } from 'lucide-react'
+import { ArrowRight, MapPin, BedDouble, Bath, Maximize, Search, Star, ShieldCheck, Award, Users, Home as HomeIcon, ChevronRight, Quote } from 'lucide-react'
 import { ContentImage } from '@/components/shared/content-image'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
@@ -42,13 +42,6 @@ const PROPERTY_FALLBACK = [
   { id: 'p4', title: 'Suburban Garden Estate', slug: 'suburban-garden-estate', summary: 'Spacious living with manicured gardens and a private pool.', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', price: '$1,420,000', beds: 6, baths: 5, area: '4,100 sqft', location: 'Pasadena, CA', badge: 'For Sale' },
   { id: 'p5', title: 'Lakeside Cottage', slug: 'lakeside-cottage', summary: 'Charming retreat by the water, perfect for weekend escapes.', img: 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=1200&q=80', price: '$540,000', beds: 3, baths: 2, area: '1,800 sqft', location: 'Lake Arrowhead, CA', badge: 'Hot Deal' },
   { id: 'p6', title: 'Penthouse Skyview', slug: 'penthouse-skyview', summary: 'Luxury penthouse with floor-to-ceiling windows and a rooftop terrace.', img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80', price: '$2,100,000', beds: 4, baths: 4, area: '3,600 sqft', location: 'Downtown LA', badge: 'Premium' },
-]
-
-const AGENTS = [
-  { name: 'Daniel Carter', role: 'Senior Property Advisor', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Sophia Reyes', role: 'Luxury Homes Specialist', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Marcus Chen', role: 'Investment Consultant', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Elena Brooks', role: 'Residential Expert', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80' },
 ]
 
 const TESTIMONIALS = [
@@ -300,33 +293,6 @@ export async function HomePageOverride() {
           </div>
         </section>
 
-        <section className="bg-slate-50 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Our team</span>
-              <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Meet Our Agents</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">A team of experienced advisors ready to help you buy, sell, or invest with confidence.</p>
-            </div>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {AGENTS.map((a) => (
-                <div key={a.name} className="group overflow-hidden rounded-3xl bg-white shadow-sm transition-all hover:shadow-xl">
-                  <div className="relative h-72 overflow-hidden">
-                    <img src={a.img} alt={a.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  </div>
-                  <div className="p-5 text-center">
-                    <div className="font-semibold text-slate-900">{a.name}</div>
-                    <div className="text-sm text-slate-600">{a.role}</div>
-                    <div className="mt-3 flex justify-center gap-2 text-slate-500">
-                      <Phone className="h-4 w-4" />
-                      <Mail className="h-4 w-4" />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Need help?</span>
@@ -361,7 +327,7 @@ export async function HomePageOverride() {
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link href="/contact" className="inline-flex items-center gap-2 rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">
-                    Contact an Agent
+                    Contact Us
                   </Link>
                 </div>
               </div>
