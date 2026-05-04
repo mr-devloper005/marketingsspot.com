@@ -10,7 +10,7 @@ export const metadata = {
 }
 
 const TOPICS = [
-  { icon: HomeIcon, title: 'Buying a Property', count: 14, text: 'Tours, offers, financing, and closing — everything from search to keys.' },
+  { icon: HomeIcon, title: 'Buying a Property', count: 14, text: 'Tours, offers, financing, and closing  -  everything from search to keys.' },
   { icon: KeyRound, title: 'Selling Your Home', count: 12, text: 'Pricing, photos, listing setup, and negotiating offers with confidence.' },
   { icon: Users, title: 'Working with Agents', count: 9, text: 'Finding the right advisor, communication, and what to expect at each stage.' },
   { icon: ShieldCheck, title: 'Account & Security', count: 8, text: 'Login issues, password resets, two-factor, and managing your profile.' },
@@ -124,7 +124,7 @@ export default function HelpPage() {
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {[
-              { icon: Phone, title: 'Call us', text: 'Mon–Sat, 9am–7pm', cta: '+1 (555) 123-4567', href: 'tel:+15551234567' },
+              { icon: Phone, title: 'Call us', text: 'Mon - Sat, 9am - 7pm', cta: '+1 (555) 123-4567', href: 'tel:+15551234567' },
               { icon: Mail, title: 'Email support', text: 'Reply within 24 hours', cta: `hello@${SITE_CONFIG.domain}`, href: `mailto:hello@${SITE_CONFIG.domain}` },
               { icon: MessageSquare, title: 'Send a message', text: 'Use our contact form', cta: 'Open form', href: '/contact' },
             ].map((c) => (
@@ -145,7 +145,7 @@ export default function HelpPage() {
             <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-center">
               <div>
                 <h3 className="text-3xl font-bold tracking-tight sm:text-4xl">Still stuck? We've got you.</h3>
-                <p className="mt-4 max-w-xl text-base leading-7 text-white/85">Our support team responds to every message personally — no scripts, no bots.</p>
+                <p className="mt-4 max-w-xl text-base leading-7 text-white/85">Our support team responds to every message personally  -  no scripts, no bots.</p>
               </div>
               <div className="flex flex-wrap gap-3 lg:justify-end">
                 <Link href="/contact" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#4E56C0] hover:bg-slate-100">
