@@ -1,11 +1,12 @@
 import Link from 'next/link'
-import { ArrowRight, BedDouble, Bath, Building2, ChevronRight, Compass, Heart, Home as HomeIcon, MapPin, Maximize, Plus, Search, ShieldCheck, SlidersHorizontal, Sparkles, Star, TrendingUp } from 'lucide-react'
+import { ArrowRight, Bath, Building2, ChevronRight, Heart, Home as HomeIcon, MapPin, Maximize, Plus, ShieldCheck, Sparkles, Star, TrendingUp } from 'lucide-react'
 import { ContentImage } from '@/components/shared/content-image'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { SchemaJsonLd } from '@/components/seo/schema-jsonld'
 import { fetchTaskPosts } from '@/lib/task-data'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
+import { CATEGORY_OPTIONS, normalizeCategory } from '@/lib/categories'
 import type { SitePost } from '@/lib/site-connector'
 
 export const TASK_LIST_PAGE_OVERRIDE_ENABLED = true
@@ -54,18 +55,8 @@ const PROPERTY_FALLBACK: SitePost[] = [
 
 const CATEGORIES = [
   { key: 'all', label: 'All Properties' },
-  { key: 'house', label: 'Houses' },
-  { key: 'villa', label: 'Villas' },
-  { key: 'apartment', label: 'Apartments' },
-  { key: 'loft', label: 'Lofts' },
-  { key: 'estate', label: 'Estates' },
-  { key: 'cottage', label: 'Cottages' },
-  { key: 'townhouse', label: 'Townhouses' },
-  { key: 'penthouse', label: 'Penthouses' },
+  ...CATEGORY_OPTIONS.map((option) => ({ key: option.slug, label: option.name })),
 ]
-
-const PRICE_RANGES = ['Any Price', 'Under $500K', '$500K – $1M', '$1M – $2M', '$2M+']
-const BED_OPTIONS = ['Any Beds', '1+', '2+', '3+', '4+', '5+']
 
 function PropertyCard({ post, index }: { post: SitePost; index: number }) {
   const meta = getPostMeta(post, index)
@@ -79,9 +70,6 @@ function PropertyCard({ post, index }: { post: SitePost; index: number }) {
         <ContentImage src={image} alt={post.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-900 shadow-sm">
           {meta.badge}
-        </span>
-        <span className="absolute right-4 top-4 rounded-full bg-[#4E56C0] px-3 py-1 text-[12px] font-semibold text-white shadow-sm">
-          {meta.price}
         </span>
         <div className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-slate-600 shadow-sm transition-colors hover:bg-white hover:text-[#4E56C0]">
           <Heart className="h-4 w-4" />
@@ -99,26 +87,37 @@ function PropertyCard({ post, index }: { post: SitePost; index: number }) {
         </div>
         <h3 className="mt-3 text-lg font-bold text-slate-900 group-hover:text-[#4E56C0]">{post.title}</h3>
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{post.summary || 'A lovingly cared-for property ready for its next chapter.'}</p>
-        <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-600">
-          <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-[#4E56C0]" />{meta.beds} Beds</span>
-          <span className="flex items-center gap-1.5"><Bath className="h-4 w-4 text-[#4E56C0]" />{meta.baths} Baths</span>
-          <span className="flex items-center gap-1.5"><Maximize className="h-4 w-4 text-[#4E56C0]" />{meta.area}</span>
-        </div>
-      </div>
+              </div>
     </Link>
   )
 }
 
-export async function TaskListPageOverride({ task, category }: { task: TaskKey; category?: string }) {
+export async function TaskListPageOverride({ task, category, page }: { task: TaskKey; category?: string; page?: string }) {
   if (task !== 'listing') {
     return null
   }
 
   const fetched = await fetchTaskPosts(task, 30, { allowMockFallback: false, fresh: true }).catch(() => [] as SitePost[])
   const posts = fetched.length ? fetched : PROPERTY_FALLBACK
-  const featured = posts.slice(0, 3)
-  const rest = posts.slice(3)
   const selectedCategory = (category || 'all').toLowerCase()
+  const currentPage = Math.max(1, Number.parseInt(page || '1', 10) || 1)
+
+  const filteredPosts =
+    selectedCategory === 'all'
+      ? posts
+      : posts.filter((post) => {
+          const c = post.content && typeof post.content === 'object' ? (post.content as any) : {}
+          const rawCategory = String(c.category || (post.tags && post.tags[0]) || '')
+          const normalized = normalizeCategory(rawCategory)
+          return normalized === selectedCategory
+        })
+
+  const pageSize = 9
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / pageSize))
+  const safePage = Math.min(currentPage, totalPages)
+  const pagedPosts = filteredPosts.slice((safePage - 1) * pageSize, safePage * pageSize)
+  const featured = pagedPosts.slice(0, 3)
+  const rest = pagedPosts.slice(3)
 
   const baseUrl = SITE_CONFIG.baseUrl.replace(/\/$/, '')
   const schemaItems = posts.slice(0, 10).map((p, i) => ({
@@ -172,40 +171,6 @@ export async function TaskListPageOverride({ task, category }: { task: TaskKey; 
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto -mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-white p-5 shadow-2xl sm:p-6">
-            <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto]">
-              <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 focus-within:border-[#4E56C0] focus-within:bg-white">
-                <Search className="h-4 w-4 text-slate-400" />
-                <input className="w-full bg-transparent text-sm focus:outline-none" placeholder="Search by address, city, or ZIP" />
-              </div>
-              <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <Compass className="h-4 w-4 text-slate-400" />
-                <select className="w-full cursor-pointer bg-transparent text-sm focus:outline-none">
-                  {CATEGORIES.map((c) => (
-                    <option key={c.key} value={c.key}>{c.label}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <TrendingUp className="h-4 w-4 text-slate-400" />
-                <select className="w-full cursor-pointer bg-transparent text-sm focus:outline-none">
-                  {PRICE_RANGES.map((p) => <option key={p}>{p}</option>)}
-                </select>
-              </div>
-              <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <BedDouble className="h-4 w-4 text-slate-400" />
-                <select className="w-full cursor-pointer bg-transparent text-sm focus:outline-none">
-                  {BED_OPTIONS.map((b) => <option key={b}>{b}</option>)}
-                </select>
-              </div>
-              <button className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3f4aa8]">
-                Search <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </section>
-
         {featured.length ? (
           <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -213,7 +178,7 @@ export async function TaskListPageOverride({ task, category }: { task: TaskKey; 
                 <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Handpicked</span>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Featured properties this week</h2>
               </div>
-              <span className="text-sm text-slate-500">{posts.length} total listings available</span>
+              <span className="text-sm text-slate-500">{filteredPosts.length} listings available</span>
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {featured.map((p, i) => (
@@ -238,11 +203,6 @@ export async function TaskListPageOverride({ task, category }: { task: TaskKey; 
                   <Plus className="h-4 w-4" />
                   Create Listing
                 </Link>
-                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700">
-                  <SlidersHorizontal className="h-4 w-4 text-[#4E56C0]" />
-                  Sort: <span className="font-semibold text-slate-900">Newest</span>
-                  <ChevronRight className="h-4 w-4 rotate-90 text-slate-400" />
-                </div>
               </div>
             </div>
 
@@ -280,19 +240,36 @@ export async function TaskListPageOverride({ task, category }: { task: TaskKey; 
               </div>
             )}
 
-            {posts.length >= 6 ? (
+            {totalPages > 1 ? (
               <div className="mt-12 flex items-center justify-center gap-2">
-                {['1', '2', '3', '…', '12'].map((p, i) => (
-                  <button
-                    key={i}
-                    className={`h-10 min-w-[40px] rounded-xl px-3 text-sm font-semibold ${p === '1' ? 'bg-[#4E56C0] text-white' : 'border border-slate-200 bg-white text-slate-700 hover:border-[#4E56C0] hover:text-[#4E56C0]'}`}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => {
+                  const href =
+                    selectedCategory === 'all'
+                      ? `/listings?page=${pageNumber}`
+                      : `/listings?category=${selectedCategory}&page=${pageNumber}`
+                  const isActive = pageNumber === safePage
+                  return (
+                    <Link
+                      key={pageNumber}
+                      href={href}
+                      className={`inline-flex h-10 min-w-[40px] items-center justify-center rounded-xl px-3 text-sm font-semibold ${isActive ? 'bg-[#4E56C0] text-white' : 'border border-slate-200 bg-white text-slate-700 hover:border-[#4E56C0] hover:text-[#4E56C0]'}`}
+                    >
+                      {pageNumber}
+                    </Link>
+                  )
+                })}
+                {safePage < totalPages ? (
+                  <Link
+                    href={
+                      selectedCategory === 'all'
+                        ? `/listings?page=${safePage + 1}`
+                        : `/listings?category=${selectedCategory}&page=${safePage + 1}`
+                    }
+                    className="flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:border-[#4E56C0] hover:text-[#4E56C0]"
                   >
-                    {p}
-                  </button>
-                ))}
-                <button className="flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 hover:border-[#4E56C0] hover:text-[#4E56C0]">
-                  Next <ChevronRight className="h-4 w-4" />
-                </button>
+                    Next <ChevronRight className="h-4 w-4" />
+                  </Link>
+                ) : null}
               </div>
             ) : null}
           </div>

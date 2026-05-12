@@ -148,8 +148,7 @@ export default function CookiesPage() {
                 <h3 className="text-xl font-bold">Your trust matters</h3>
               </div>
               <p className="mt-4 text-sm leading-7 text-slate-600">
-                We never use cookies to identify you across unrelated websites or sell your data. Have a question? Reach our team at{' '}
-                <a href={`mailto:privacy@${SITE_CONFIG.domain}`} className="text-[#4E56C0] hover:underline">privacy@{SITE_CONFIG.domain}</a>.
+                We never use cookies to identify you across unrelated websites or sell your data. Have a question?
               </p>
               <Link href="/contact" className="mt-6 inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-[#4E56C0] hover:text-[#4E56C0]">
                 <Mail className="h-4 w-4" /> Contact our privacy team

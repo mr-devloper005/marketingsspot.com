@@ -116,30 +116,6 @@ export default function HelpPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Need more help?</span>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Talk to a real person</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">Pick the channel that works best for you. We're here every day.</p>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-3">
-            {[
-              { icon: Phone, title: 'Call us', text: 'Mon - Sat, 9am - 7pm', cta: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-              { icon: Mail, title: 'Email support', text: 'Reply within 24 hours', cta: `hello@${SITE_CONFIG.domain}`, href: `mailto:hello@${SITE_CONFIG.domain}` },
-              { icon: MessageSquare, title: 'Send a message', text: 'Use our contact form', cta: 'Open form', href: '/contact' },
-            ].map((c) => (
-              <Link key={c.title} href={c.href} className="group rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#4E56C0]/10 text-[#4E56C0] transition-colors group-hover:bg-[#4E56C0] group-hover:text-white">
-                  <c.icon className="h-6 w-6" />
-                </div>
-                <h3 className="mt-5 text-lg font-bold text-slate-900">{c.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{c.text}</p>
-                <p className="mt-4 text-sm font-semibold text-[#4E56C0]">{c.cta}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
         <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-[#4E56C0] via-[#9B5DE0] to-[#D78FEE] p-10 text-white shadow-2xl sm:p-14">
             <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-center">

@@ -45,7 +45,6 @@ export function NavbarOverride() {
           </div>
           <div className="min-w-0">
             <span className="block truncate text-xl font-bold tracking-tight">{SITE_CONFIG.name}</span>
-            <span className="block text-[10px] uppercase tracking-[0.24em] text-slate-500">Property Listings</span>
           </div>
         </Link>
 
