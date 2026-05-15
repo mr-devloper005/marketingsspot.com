@@ -31,11 +31,6 @@ const MILESTONES = [
   { year: '2026', title: 'Today', text: 'A trusted partner for over 12,000 families and counting.' },
 ]
 
-const LEADERSHIP = [
-  { name: 'Daniel Carter', role: 'Founder & CEO', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Sophia Reyes', role: 'Head of Operations', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80' },
-  { name: 'Marcus Chen', role: 'Head of Investments', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80' },
-]
 
 export default function AboutPage() {
   return (
@@ -171,33 +166,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-slate-50 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Leadership</span>
-              <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">The people behind the platform</h2>
-            </div>
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {LEADERSHIP.map((p) => (
-                <div key={p.name} className="overflow-hidden rounded-3xl bg-white shadow-sm">
-                  <div className="relative h-72 overflow-hidden">
-                    <img src={p.img} alt={p.name} className="h-full w-full object-cover" />
-                  </div>
-                  <div className="p-6 text-center">
-                    <div className="font-bold text-slate-900">{p.name}</div>
-                    <div className="text-sm text-[#4E56C0]">{p.role}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 text-center">
-              <Link href="/contact" className="inline-flex items-center gap-2 rounded-full bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white hover:bg-[#3f4aa8]">
-                Talk to Our Team <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
+        
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-[#4E56C0] via-[#9B5DE0] to-[#D78FEE] p-10 text-white shadow-2xl sm:p-14">
             <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">

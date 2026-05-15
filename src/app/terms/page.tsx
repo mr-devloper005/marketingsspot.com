@@ -92,8 +92,7 @@ export default function TermsPage() {
                   <h2 className="text-2xl font-bold text-slate-900">10. Contact</h2>
                 </div>
                 <p className="mt-4 text-base leading-7 text-slate-600">
-                  Questions about these terms? Email us at{' '}
-                  <a href={`mailto:legal@${SITE_CONFIG.domain}`} className="text-[#4E56C0] hover:underline">legal@{SITE_CONFIG.domain}</a>{' '}or use our{' '}
+                  Questions about these terms? Use our{' '}
                   <Link href="/contact" className="text-[#4E56C0] hover:underline">contact page</Link>.
                 </p>
               </section>

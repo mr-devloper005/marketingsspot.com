@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
-import { ArrowRight, MapPin, BedDouble, Bath, Maximize, Search, Star, ShieldCheck, Award, Users, Home as HomeIcon, ChevronRight, Quote } from 'lucide-react'
+import { Suspense, useEffect, useState } from 'react'
+import { ArrowRight, MapPin, BedDouble, Bath, Maximize, Search, ShieldCheck, Award, Users, Home as HomeIcon, ChevronRight } from 'lucide-react'
 import { ContentImage } from '@/components/shared/content-image'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
@@ -44,18 +47,6 @@ const PROPERTY_FALLBACK = [
   { id: 'p6', title: 'Penthouse Skyview', slug: 'penthouse-skyview', summary: 'Luxury penthouse with floor-to-ceiling windows and a rooftop terrace.', img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80', price: '$2,100,000', beds: 4, baths: 4, area: '3,600 sqft', location: 'Downtown LA', badge: 'Premium' },
 ]
 
-const TESTIMONIALS = [
-  { name: 'Olivia Bennett', role: 'Homeowner', text: 'They guided us through every step. We found our dream home in under a month and the process felt effortless.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80' },
-  { name: 'James Thornton', role: 'Property Investor', text: 'Professional, transparent, and deeply knowledgeable about the local market. Highly recommended.', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80' },
-  { name: 'Priya Sharma', role: 'First-time Buyer', text: 'They made buying my first home stress-free. The team truly listens and delivers beyond expectations.', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80' },
-]
-
-const ARTICLES = [
-  { title: '7 things to check before buying your next home', summary: 'A practical buyer checklist to avoid surprises and negotiate confidently.', img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1000&q=80' },
-  { title: 'Staging tips that help homes sell faster', summary: 'Simple, low-cost ideas to make every room shine in listing photos.', img: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1000&q=80' },
-  { title: '2026 market outlook: where prices are heading', summary: 'Our agents share insights on neighborhoods to watch this year.', img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1000&q=80' },
-]
-
 const FAQS = [
   { q: 'How do I list my property on the platform?', a: 'Create an account, click "Add Listing", fill in your property details and photos, then submit for review. Most listings go live within 24 hours.' },
   { q: 'Do you charge any fees for browsing listings?', a: 'No. Browsing all listings is completely free. We only charge a small commission when a property is successfully sold or rented.' },
@@ -75,7 +66,6 @@ function PropertyCard({ post, index }: { post?: SitePost; index: number }) {
       <div className="relative h-56 overflow-hidden">
         <ContentImage src={image} alt={title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-900 shadow-sm">{meta.badge}</span>
-        <span className="absolute right-4 top-4 rounded-full bg-[#4E56C0] px-3 py-1 text-[12px] font-semibold text-white shadow-sm">{meta.price}</span>
       </div>
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -84,21 +74,45 @@ function PropertyCard({ post, index }: { post?: SitePost; index: number }) {
         </div>
         <h3 className="mt-2 text-lg font-semibold text-slate-900 group-hover:text-[#4E56C0]">{title}</h3>
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{summary}</p>
-        <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-600">
-          <span className="flex items-center gap-1.5"><BedDouble className="h-4 w-4 text-[#4E56C0]" />{meta.beds} Beds</span>
-          <span className="flex items-center gap-1.5"><Bath className="h-4 w-4 text-[#4E56C0]" />{meta.baths} Baths</span>
-          <span className="flex items-center gap-1.5"><Maximize className="h-4 w-4 text-[#4E56C0]" />{meta.area}</span>
-        </div>
-      </div>
+              </div>
     </Link>
   )
 }
 
-export async function HomePageOverride() {
-  const listingPosts = await fetchTaskPosts('listing', 8, { allowMockFallback: false, fresh: true }).catch(() => [] as SitePost[])
+export function HomePageOverride() {
+  const [listingPosts, setListingPosts] = useState<SitePost[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const posts = await fetchTaskPosts('listing', 8, { allowMockFallback: false, fresh: true })
+        setListingPosts(posts)
+      } catch (error) {
+        setListingPosts([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
 
   const featured = listingPosts.slice(0, 3)
   const exclusive = listingPosts.slice(3, 9)
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white text-slate-900">
+        <NavbarShell />
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4E56C0] mx-auto"></div>
+            <p className="mt-4 text-slate-600">Loading...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
@@ -114,14 +128,14 @@ export async function HomePageOverride() {
             <div className="max-w-3xl text-white">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white backdrop-blur">
                 <ShieldCheck className="h-3.5 w-3.5" />
-                Trusted Property Platform
+                Trusted Digital Platform
               </span>
               <h1 className="mt-6 text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
                 {SITE_CONFIG.name}<br />
-                <span className="text-white/90">Property Listings</span>
+                <span className="text-white/90">Discover & Connect</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-8 text-white/85">
-                Discover exclusive homes, villas, and apartments curated by our local experts. Find your next address with confidence.
+                Explore trusted content, services, and opportunities curated for modern audiences. Discover what matters and act with confidence.
               </p>
 
               <div className="mt-10 grid gap-2 rounded-2xl bg-white p-2 shadow-2xl sm:grid-cols-[1.4fr_1fr_auto] sm:gap-0">
@@ -176,14 +190,7 @@ export async function HomePageOverride() {
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-2">
-              {['All', 'Houses', 'Apartments', 'Villas', 'Lofts', 'Cottages', 'Commercial'].map((cat, i) => (
-                <button key={cat} className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${i === 0 ? 'border-[#4E56C0] bg-[#4E56C0] text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-[#4E56C0] hover:text-[#4E56C0]'}`}>
-                  {cat}
-                </button>
-              ))}
-            </div>
-
+            
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {[0, 1, 2, 3, 4, 5].map((i) => (
                 <PropertyCard key={i} post={exclusive[i]} index={i + 3} />
@@ -242,57 +249,8 @@ export async function HomePageOverride() {
           </div>
         </section>
 
-        <section className="bg-[#4E56C0] py-20 text-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#FDCFFA]">What clients say</span>
-              <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Trusted by Homeowners and Agents</h2>
-            </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {TESTIMONIALS.map((t) => (
-                <div key={t.name} className="rounded-3xl bg-white/5 p-7 backdrop-blur">
-                  <Quote className="h-7 w-7 text-[#FDCFFA]" />
-                  <p className="mt-4 text-base leading-7 text-white/90">"{t.text}"</p>
-                  <div className="mt-6 flex items-center gap-1 text-[#FDCFFA]">
-                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
-                  </div>
-                  <div className="mt-5 flex items-center gap-3">
-                    <img src={t.img} alt={t.name} className="h-11 w-11 rounded-full object-cover" />
-                    <div>
-                      <div className="font-semibold">{t.name}</div>
-                      <div className="text-xs text-white/60">{t.role}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">From the blog</span>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Read Our Latest Articles</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">Tips, market insights, and stories from our agents to help you make smarter property decisions.</p>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {ARTICLES.map((a) => (
-              <article key={a.title} className="group overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:shadow-xl">
-                <div className="relative h-52 overflow-hidden">
-                  <img src={a.img} alt={a.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 group-hover:text-[#4E56C0]">{a.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{a.summary}</p>
-                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#4E56C0]">
-                    Read more <ArrowRight className="h-4 w-4" />
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
+        
+        
         <section className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Need help?</span>
@@ -300,7 +258,7 @@ export async function HomePageOverride() {
           </div>
           <div className="mt-12 space-y-3">
             {FAQS.map((f, i) => (
-              <details key={i} className="group rounded-2xl border border-slate-200 bg-white p-5 open:shadow-md" open={i === 0}>
+              <details key={i} className="group rounded-2xl border border-slate-200 bg-white p-5 open:shadow-md">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-slate-900">
                   {f.q}
                   <ChevronRight className="h-5 w-5 text-[#4E56C0] transition-transform group-open:rotate-90" />
