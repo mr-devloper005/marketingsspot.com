@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
+import { MapPin, Phone, Mail } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 
 export const FOOTER_OVERRIDE_ENABLED = true
@@ -37,23 +37,11 @@ export function FooterOverride() {
               </div>
               <div>
                 <div className="text-xl font-bold text-white">{SITE_CONFIG.name}</div>
-                <div className="text-[10px] uppercase tracking-[0.24em] text-slate-400">Property Listings</div>
               </div>
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-7 text-slate-400">
               Discover homes you'll love. {SITE_CONFIG.name} connects buyers, sellers, and agents through verified listings and trusted local expertise.
             </p>
-            <div className="mt-6 flex gap-3">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors hover:border-[#4E56C0] hover:bg-[#4E56C0] hover:text-white"
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
-            </div>
           </div>
 
           <div>
@@ -79,24 +67,6 @@ export function FooterOverride() {
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-white">Contact Info</h3>
-            <ul className="mt-5 space-y-4 text-sm text-slate-400">
-              <li className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#4E56C0]" />
-                <span>123 Property Avenue, Beverly Hills, CA 90210</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#4E56C0]" />
-                <a href="tel:+15551234567" className="hover:text-white">+1 (555) 123-4567</a>
-              </li>
-              <li className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#4E56C0]" />
-                <a href={`mailto:hello@${SITE_CONFIG.domain}`} className="hover:text-white">hello@{SITE_CONFIG.domain}</a>
-              </li>
             </ul>
           </div>
         </div>

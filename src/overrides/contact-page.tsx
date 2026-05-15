@@ -17,11 +17,6 @@ const REASONS = [
   { id: 'other', label: 'Something else' },
 ]
 
-const OFFICES = [
-  { city: 'Beverly Hills', address: '123 Property Avenue, Beverly Hills, CA 90210', phone: '+1 (555) 123-4567', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80' },
-  { city: 'Santa Monica', address: '88 Ocean View Blvd, Santa Monica, CA 90401', phone: '+1 (555) 234-5678', img: 'https://images.unsplash.com/photo-1554435493-93422e8d1a41?auto=format&fit=crop&w=600&q=80' },
-  { city: 'Pasadena', address: '45 Garden Street, Pasadena, CA 91101', phone: '+1 (555) 345-6789', img: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=80' },
-]
 
 export function ContactPageOverride() {
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || `hello@${SITE_CONFIG.domain}`
@@ -87,26 +82,7 @@ export function ContactPageOverride() {
           </div>
         </section>
 
-        <section className="relative z-10 mx-auto -mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[ 
-              { icon: Phone, label: 'Call us', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-              { icon: Mail, label: 'Email us', value: contactEmail, href: contactEmailHref },
-              { icon: Clock, label: 'Office hours', value: 'Mon - Sat, 9am - 7pm' },
-            ].map((c) => (
-              <a key={c.label} href={c.href || '#'} className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:shadow-xl">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#4E56C0]/10 text-[#4E56C0] transition-colors group-hover:bg-[#4E56C0] group-hover:text-white">
-                  <c.icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-xs uppercase tracking-wider text-slate-500">{c.label}</div>
-                  <div className="text-sm font-semibold text-slate-900">{c.value}</div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-
+        
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
             <div>
@@ -197,9 +173,6 @@ export function ContactPageOverride() {
                     <button type="submit" disabled={submitting} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#4E56C0] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#3f4aa8] disabled:opacity-70">
                       {submitting ? (<><Loader2 className="h-4 w-4 animate-spin" /> Sending...</>) : (<>Send Message <ArrowRight className="h-4 w-4" /></>)}
                     </button>
-                    <a href={contactEmailHref} className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50">
-                      <Mail className="h-4 w-4 text-[#4E56C0]" /> Email Us
-                    </a>
                     <p className="text-xs text-slate-500">By sending, you agree to our <Link href="/privacy" className="text-[#4E56C0] hover:underline">privacy policy</Link>.</p>
                   </form>
                 </>
@@ -208,38 +181,7 @@ export function ContactPageOverride() {
           </div>
         </section>
 
-        <section className="bg-slate-50 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Visit us</span>
-              <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Our offices</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">Stop by any of our locations. Coffee's on us.</p>
-            </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {OFFICES.map((o) => (
-                <div key={o.city} className="overflow-hidden rounded-3xl bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-                  <div className="relative h-44 overflow-hidden">
-                    <img src={o.img} alt={o.city} className="h-full w-full object-cover" />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-[#4E56C0]">
-                      <Sparkles className="h-4 w-4" />
-                      <span className="text-xs font-semibold uppercase tracking-wider">Office</span>
-                    </div>
-                    <h3 className="mt-2 text-xl font-bold text-slate-900">{o.city}</h3>
-                    <div className="mt-3 flex items-start gap-2 text-sm text-slate-600">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#4E56C0]" /> {o.address}
-                    </div>
-                    <a href={`tel:${o.phone}`} className="mt-2 flex items-center gap-2 text-sm text-slate-600 hover:text-[#4E56C0]">
-                      <Phone className="h-4 w-4 text-[#4E56C0]" /> {o.phone}
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
+              </main>
 
       <Footer />
     </div>

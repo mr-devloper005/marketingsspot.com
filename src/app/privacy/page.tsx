@@ -155,7 +155,7 @@ export default function PrivacyPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4E56C0]/10 text-[#4E56C0]"><Mail className="h-5 w-5" /></div>
                   <h2 className="m-0 text-2xl font-bold text-slate-900">8. Contact us</h2>
                 </div>
-                <p className="mt-4">Questions about this policy? Reach our privacy team at <a href={`mailto:privacy@${SITE_CONFIG.domain}`} className="text-[#4E56C0] hover:underline">privacy@{SITE_CONFIG.domain}</a> or use our <Link href="/contact" className="text-[#4E56C0] hover:underline">contact page</Link>.</p>
+                <p className="mt-4">Questions about this policy? Use our <Link href="/contact" className="text-[#4E56C0] hover:underline">contact page</Link>.</p>
               </section>
 
               <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6">

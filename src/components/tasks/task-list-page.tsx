@@ -39,9 +39,9 @@ const variantShells = {
   'sbm-library': 'bg-[linear-gradient(180deg,#f7f8fc_0%,#ffffff_100%)]',
 } as const
 
-export async function TaskListPage({ task, category }: { task: TaskKey; category?: string }) {
+export async function TaskListPage({ task, category, page }: { task: TaskKey; category?: string; page?: string }) {
   if (TASK_LIST_PAGE_OVERRIDE_ENABLED) {
-    return await TaskListPageOverride({ task, category })
+    return await TaskListPageOverride({ task, category, page })
   }
 
   const taskConfig = getTaskConfig(task)
@@ -128,21 +128,8 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
               <p className={`mt-4 max-w-2xl text-sm leading-7 ${ui.muted}`}>Built with a cleaner scan rhythm, stronger metadata grouping, and a structure designed for business discovery rather than editorial reading.</p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link href={taskConfig?.route || '#'} className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${ui.button}`}>Explore results <ArrowRight className="h-4 w-4" /></Link>
-                <Link href="/search" className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${ui.soft}`}>Open search</Link>
               </div>
             </div>
-            <form className={`grid gap-3 rounded-[2rem] p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] ${ui.soft}`} action={taskConfig?.route || '#'}>
-              <div>
-                <label className={`text-xs uppercase tracking-[0.2em] ${ui.muted}`}>Category</label>
-                <select name="category" defaultValue={normalizedCategory} className={`mt-2 h-11 w-full rounded-xl px-3 text-sm ${ui.input}`}>
-                  <option value="all">All categories</option>
-                  {CATEGORY_OPTIONS.map((item) => (
-                    <option key={item.slug} value={item.slug}>{item.name}</option>
-                  ))}
-                </select>
-              </div>
-              <button type="submit" className={`h-11 rounded-xl text-sm font-medium ${ui.button}`}>Apply filters</button>
-            </form>
           </section>
         ) : null}
 
