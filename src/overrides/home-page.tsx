@@ -1,14 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { Suspense, useEffect, useState } from 'react'
-import { ArrowRight, MapPin, BedDouble, Bath, Maximize, Search, ShieldCheck, Award, Users, Home as HomeIcon, ChevronRight } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowRight, MapPin, Search, ShieldCheck, Award, Users, Home as HomeIcon, ChevronRight } from 'lucide-react'
 import { ContentImage } from '@/components/shared/content-image'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { SITE_CONFIG } from '@/lib/site-config'
-import { fetchTaskPosts } from '@/lib/task-data'
-import type { SitePost } from '@/lib/site-connector'
+import { fetchSiteFeed, type SitePost } from '@/lib/site-connector'
 
 export const HOME_PAGE_OVERRIDE_ENABLED = true
 
@@ -38,15 +37,6 @@ function getPostMeta(post?: SitePost | null) {
 
 const HERO_BG = 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1920&q=80'
 
-const PROPERTY_FALLBACK = [
-  { id: 'p1', title: 'Modern Hillside Villa', slug: 'modern-hillside-villa', summary: 'A serene retreat with panoramic city views and contemporary design.', img: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80', price: '$1,250,000', beds: 4, baths: 3, area: '3,200 sqft', location: 'Beverly Hills, CA', badge: 'For Sale' },
-  { id: 'p2', title: 'Coastal Family Home', slug: 'coastal-family-home', summary: 'Bright open spaces just minutes from the beach with a private garden.', img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80', price: '$890,000', beds: 5, baths: 4, area: '2,850 sqft', location: 'Santa Monica, CA', badge: 'New' },
-  { id: 'p3', title: 'Downtown Loft Suite', slug: 'downtown-loft-suite', summary: 'High ceilings, exposed brick, and walkable access to the best of downtown.', img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', price: '$675,000', beds: 2, baths: 2, area: '1,450 sqft', location: 'Los Angeles, CA', badge: 'Featured' },
-  { id: 'p4', title: 'Suburban Garden Estate', slug: 'suburban-garden-estate', summary: 'Spacious living with manicured gardens and a private pool.', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', price: '$1,420,000', beds: 6, baths: 5, area: '4,100 sqft', location: 'Pasadena, CA', badge: 'For Sale' },
-  { id: 'p5', title: 'Lakeside Cottage', slug: 'lakeside-cottage', summary: 'Charming retreat by the water, perfect for weekend escapes.', img: 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=1200&q=80', price: '$540,000', beds: 3, baths: 2, area: '1,800 sqft', location: 'Lake Arrowhead, CA', badge: 'Hot Deal' },
-  { id: 'p6', title: 'Penthouse Skyview', slug: 'penthouse-skyview', summary: 'Luxury penthouse with floor-to-ceiling windows and a rooftop terrace.', img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80', price: '$2,100,000', beds: 4, baths: 4, area: '3,600 sqft', location: 'Downtown LA', badge: 'Premium' },
-]
-
 const FAQS = [
   { q: 'How do I list my property on the platform?', a: 'Create an account, click "Add Listing", fill in your property details and photos, then submit for review. Most listings go live within 24 hours.' },
   { q: 'Do you charge any fees for browsing listings?', a: 'No. Browsing all listings is completely free. We only charge a small commission when a property is successfully sold or rented.' },
@@ -54,15 +44,14 @@ const FAQS = [
   { q: 'How do I contact a property agent directly?', a: 'Each agent profile includes phone, email, and a contact form. You can also message them from any of their listings.' },
 ]
 
-function PropertyCard({ post, index }: { post?: SitePost; index: number }) {
-  const fb = PROPERTY_FALLBACK[index % PROPERTY_FALLBACK.length]
-  const image = post ? getPostImage(post) : fb.img
-  const meta = post ? getPostMeta(post) : { location: fb.location, category: 'Property', price: fb.price, beds: fb.beds, baths: fb.baths, area: fb.area, badge: fb.badge }
-  const title = post?.title || fb.title
-  const summary = post?.summary || fb.summary
-  const slug = post?.slug || fb.slug
+function PropertyCard({ post }: { post: SitePost }) {
+  const image = getPostImage(post)
+  const meta = getPostMeta(post)
+  const title = post.title
+  const summary = post.summary || 'View this listing for complete details, photos, and contact information.'
+  const slug = post.slug
   return (
-    <Link href={`/listings/${slug}`} className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+    <Link href={`/listing/${slug}`} className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
       <div className="relative h-56 overflow-hidden">
         <ContentImage src={image} alt={title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
         <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-900 shadow-sm">{meta.badge}</span>
@@ -86,7 +75,13 @@ export function HomePageOverride() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const posts = await fetchTaskPosts('listing', 8, { allowMockFallback: false, fresh: true })
+        const feed = await fetchSiteFeed(12, { task: 'listing', fresh: true })
+        const posts = (feed?.posts || []).filter((post) => {
+          const status = typeof (post as SitePost & { status?: string }).status === 'string'
+            ? String((post as SitePost & { status?: string }).status).toUpperCase()
+            : ''
+          return !status || status === 'PUBLISHED'
+        })
         setListingPosts(posts)
       } catch (error) {
         setListingPosts([])
@@ -98,7 +93,7 @@ export function HomePageOverride() {
   }, [])
 
   const featured = listingPosts.slice(0, 3)
-  const exclusive = listingPosts.slice(3, 9)
+  const exclusive = listingPosts.slice(3, 12)
 
   if (loading) {
     return (
@@ -147,7 +142,7 @@ export function HomePageOverride() {
                   <MapPin className="h-4 w-4 text-slate-400" />
                   <input className="w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none" placeholder="Any location" />
                 </div>
-                <Link href="/listings" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3f4aa8]">
+                <Link href="/listing" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3f4aa8]">
                   Search
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -171,8 +166,8 @@ export function HomePageOverride() {
             </p>
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[0, 1, 2].map((i) => (
-              <PropertyCard key={i} post={featured[i]} index={i} />
+            {featured.map((post) => (
+              <PropertyCard key={post.id} post={post} />
             ))}
           </div>
         </section>
@@ -184,7 +179,7 @@ export function HomePageOverride() {
                 <span className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4E56C0]">Browse listings</span>
                 <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Our Most Exclusive Properties</h2>
               </div>
-              <Link href="/listings" className="inline-flex items-center gap-2 rounded-full bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white hover:bg-[#102f5a]">
+              <Link href="/listing" className="inline-flex items-center gap-2 rounded-full bg-[#4E56C0] px-6 py-3 text-sm font-semibold text-white hover:bg-[#102f5a]">
                 View All Listings
                 <ChevronRight className="h-4 w-4" />
               </Link>
@@ -192,8 +187,8 @@ export function HomePageOverride() {
 
             
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <PropertyCard key={i} post={exclusive[i]} index={i + 3} />
+              {exclusive.map((post) => (
+                <PropertyCard key={post.id} post={post} />
               ))}
             </div>
           </div>
